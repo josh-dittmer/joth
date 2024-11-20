@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charSet="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+
+    <title>{% block headTitle %}Joth{% endblock %}</title>
+    <meta name="application-name" content="Joth">
+    <meta name="description" content="{% block headDescription %}Joth Authentication Service{% endblock %}">
+
+    <link rel="stylesheet" href="/public/styles/app.css">
+    {% block styles %}{% endblock %}
+    {% block headScripts %}{% endblock %}
+</head>
+<body>
+    <main>{% block main %}{% endblock %}</main>
+    {% block scripts %}{% endblock %}
+    {% block extraScripts %}{% endblock %}
+</body>
+</html>

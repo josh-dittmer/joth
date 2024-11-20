@@ -1,0 +1,86 @@
+{% extends "layouts/auth_form.njk" %}
+
+{% block form %}
+    <form action="{{ signupFormAction }}" method="POST">
+        {% if errorMessage %}
+        <div class="mt-3 flex flex-col pl-10 pr-10">
+        {% else %}
+        <div class="mt-5 flex flex-col pl-10 pr-10">
+        {% endif %}
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+            <div class="input-field w-64 flex items-center p-2 border-b border-gray-600">
+                <object 
+                    data="/public/img/email.svg" 
+                    type="image/svg+xml"
+                    width="15"
+                    height="15"
+                ></object>
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Email..." 
+                    class="ml-1 p-2 text-sm outline-none bg-whitee" 
+                    required
+                />
+            </div>
+            <div class="input-field w-64 mt-5 flex items-center p-2 border-b border-gray-600">
+                <object 
+                    data="/public/img/password.svg" 
+                    type="image/svg+xml"
+                    width="15"
+                    height="15"
+                ></object>
+                <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password..." 
+                    class="ml-1 p-2 text-sm outline-none bg-white"
+                    required
+                />
+            </div>
+                        <div class="input-field w-64 mt-5 flex items-center p-2 border-b border-gray-600">
+                <object 
+                    data="/public/img/password.svg" 
+                    type="image/svg+xml"
+                    width="15"
+                    height="15"
+                ></object>
+                <input 
+                    type="password" 
+                    name="passwordVerification" 
+                    placeholder="Confirm password..." 
+                    class="ml-1 p-2 text-sm outline-none bg-white"
+                    required
+                />
+            </div>
+            <div class="flex justify-center mt-5 p-5">
+                <button 
+                    type="submit" 
+                    class="signup-button w-full rounded-xl p-2 bg-gray-900 text-white font-bold"
+                >
+                    SIGNUP
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block form_styles %}
+    <style>
+        @keyframes signup-button-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .signup-button:hover {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #111827, #111827);
+            background-size: 400% 400%;
+            animation: signup-button-animation 0.33s ease;
+            animation-fill-mode: forwards;
+        }
+    </style>
+{% endblock %}

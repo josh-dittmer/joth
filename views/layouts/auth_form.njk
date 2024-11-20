@@ -1,0 +1,77 @@
+{% extends "layouts/index.njk" %}
+
+{% block main %}
+    <div class="h-screen w-screen flex justify-center items-center bg-gray-900">
+        <div class="flex flex-col justify-center p-4 rounded-xl shadow-inner bg-white w-96">
+            <div class="mt-5 text-center">
+                <h1 class="text-4xl font-bold text-gray-900 p-1">JOTH</h1>
+                <div class="flex justify-center items-center">
+                    <h2 class="text-md text-gray-600 p-1">Jothorize yourself</h2>
+                    <a href="#" class="p-1 rounded hover:bg-gray-200">
+                        <object 
+                            data="/public/img/question.svg" 
+                            type="image/svg+xml"
+                            width="15"
+                            height="15"
+                        ></object>
+                    </a>
+                </div>
+            </div>
+            <div class="flex justify-center items-center mt-5 text-xs">
+                {% if signupUrl %}
+                    <div class="rounded-l-full w-32 flex bg-gray-900 p-1 justify-center">
+                        <a class="text-white">Login</p>
+                    </div>
+                    <a href="{{ signupUrl }}">
+                    <div class="rounded-r-full w-32 flex bg-gray-200 hover:bg-gray-300 p-1 justify-center">
+                        <p class="text-gray-900">Signup</p>
+                    </div>
+                    </a>
+                {% endif %}
+                {% if loginUrl %}
+                    <a href="{{ loginUrl }}">
+                    <div class="rounded-l-full w-32 flex bg-gray-200 hover:bg-gray-300 p-1 justify-center">
+                        <p class="text-gray-900">Login</p>
+                    </div>
+                    </a>
+                    <div class="rounded-r-full w-32 flex bg-gray-900 p-1 justify-center">
+                        <p class="text-white">Signup</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% if errorMessage %}
+                <div class="mt-5 flex justify-center">
+                <div class="flex gap-2 items-center rounded w-fit">
+                    <object 
+                        data="/public/img/error.svg" 
+                        type="image/svg+xml"
+                        width="15"
+                        height="15"
+                    ></object>
+                    <p class="text-red-800 text-sm">{{ errorMessage }}</p>
+                </div>
+                </div>
+            {% endif %}
+            {% block form %}{% endblock %}
+            <div class="flex justify-center">
+                <p class="text-xs text-gray-600">v1.0.0 | By Josh Dittmer | <a class="underline" href="https://github.com/josh-dittmer/joth">GitHub</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <style>
+        @keyframes input-field-animation {
+            100% {
+                transform: scale(1.03);
+            }
+        }
+
+        .input-field:hover, .input-field:focus-within {
+            animation: input-field-animation 0.25s ease;
+            animation-fill-mode: forwards;
+        }
+    </style>
+    {% block form_styles %}{% endblock %}
+{% endblock %}

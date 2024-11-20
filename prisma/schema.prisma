@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgres"
-  url      = "postgresql://prisma:secret@localhost:8888/prismadb?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -11,13 +11,19 @@ generator client {
 }
 
 model User {
-  id             String          @id @db.Uuid
-  email          String          @unique
-  passwordHash   String          @db.VarChar(255)
+  id             String          @id @default(uuid()) @db.Uuid
+  email          String          @unique @db.VarChar(255)
+  passwordHash   String?         @db.VarChar(255)
+  tokenVersion   Int             @default(0)
+  lastLoginAt    DateTime?       @db.Timestamp(6)
+  lastLoginIP    String?         @db.Inet
+  createdIP      String          @db.Inet
+  createdAt      DateTime        @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime?       @updatedAt
   OAuthAuthCodes OAuthAuthCode[]
   OAuthTokens    OAuthToken[]
 
-  @@index([email], name: "idx_user_email")
+  @@index([email])
 }
 
 enum GrantTypes {
@@ -32,6 +38,8 @@ model OAuthClient {
   id               String             @id @default(uuid()) @db.Uuid
   name             String             @db.VarChar(255)
   secret           String?            @db.VarChar(255)
+  createdAt        DateTime           @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime?          @updatedAt
   redirectUris     String[]
   allowedGrants    GrantTypes[]
   scopes           OAuthScope[]
@@ -41,10 +49,12 @@ model OAuthClient {
 }
 
 model OAuthClientScope {
-  clientId String      @db.Uuid
-  client   OAuthClient @relation(fields: [clientId], references: [id])
-  scopeId  String      @db.Uuid
-  scope    OAuthScope  @relation(fields: [scopeId], references: [id])
+  clientId  String      @db.Uuid
+  client    OAuthClient @relation(fields: [clientId], references: [id])
+  scopeId   String      @db.Uuid
+  scope     OAuthScope  @relation(fields: [scopeId], references: [id])
+  createdAt DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt DateTime?   @updatedAt
 
   @@id([clientId, scopeId])
   @@index([clientId], name: "idx_oauthclient_oauthscope_clientid")
@@ -63,6 +73,8 @@ model OAuthAuthCode {
   codeChallenge       String?
   codeChallengeMethod CodeChallengeMethod @default(plain)
   expiresAt           DateTime
+  createdAt           DateTime            @default(now()) @db.Timestamp(6)
+  updatedAt           DateTime?           @updatedAt
   user                User?               @relation(fields: [userId], references: [id])
   userId              String?             @db.Uuid
   client              OAuthClient         @relation(fields: [clientId], references: [id])
@@ -75,6 +87,8 @@ model OAuthToken {
   accessTokenExpiresAt  DateTime
   refreshToken          String?      @unique
   refreshTokenExpiresAt DateTime?
+  createdAt             DateTime     @default(now()) @db.Timestamp(6)
+  updatedAt             DateTime?    @updatedAt
   client                OAuthClient  @relation(fields: [clientId], references: [id])
   clientId              String       @db.Uuid
   user                  User?        @relation(fields: [userId], references: [id])
@@ -88,11 +102,12 @@ model OAuthToken {
 model OAuthScope {
   id            String          @id @db.Uuid
   name          String
+  createdAt     DateTime        @default(now()) @db.Timestamp(6)
+  updatedAt     DateTime?       @updatedAt
   OAuthClients  OAuthClient[]
   OAuthAuthCode OAuthAuthCode[]
   OAuthToken    OAuthToken[]
-
-
   OAuthClientScope OAuthClientScope[]
+
   @@index([name], name: "idx_oauthscope_name")
 }

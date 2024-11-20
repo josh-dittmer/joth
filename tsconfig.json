@@ -1,42 +1,21 @@
 {
-  "compilerOptions": {
-    /* Basic Options */
-    "target": "esnext",
-    "module": "node16",
-    "moduleResolution": "node16",
-    "lib": ["esnext", "esnext.asynciterable"],
-    "outDir": "dist",
+    "compilerOptions": {
+        "outDir": "dist",
+        "target": "ESNext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
 
-    /* Strict Type-Checking Options */
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
+        /* Advanced Options */
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
 
-    /* Additional Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-
-    /* Module Resolution Options */
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-
-    /* Experimental Options */
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
-    /* Advanced Options */
-    "forceConsistentCasingInFileNames": true,
-    "typeRoots": [
-      "@types",
-      "node_modules/@types",
-    ]
-  },
-  "include": ["src", "prisma"],
-  "exclude": ["node_modules/**"]
+        /* Output Options */
+        "removeComments": true,
+        "sourceMap": true,
+        "types": ["./src/global.d.ts"],
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*.ts", "prisma/**/*.ts"]
 }
