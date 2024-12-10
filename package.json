@@ -1,5 +1,5 @@
 {
-    "name": "jmondi-oauth2-example-server",
+    "name": "joth",
     "scripts": {
         "build": "npx tsc -b",
         "start": "npm run tw && npm run build && node dist/src/main.js",
