@@ -578,8 +578,8 @@ video {
   display: none;
 }
 
-.h-screen {
-  height: 100vh;
+.h-svh {
+  height: 100svh;
 }
 
 .w-32 {
@@ -603,8 +603,8 @@ video {
   width: 100%;
 }
 
-.w-screen {
-  width: 100vw;
+.w-svw {
+  width: 100svw;
 }
 
 .transform {
@@ -749,6 +749,13 @@ video {
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 .hover\:bg-gray-200:hover {

@@ -1,5 +1,6 @@
 import { DateDuration } from "@jmondi/date-duration";
 import { User } from "@prisma/client";
+import 'dotenv/config.js';
 import { Response } from "express";
 import { JothJwtService } from "../app/oauth/services/jwt_service.js";
 
@@ -15,7 +16,7 @@ export async function createSessionCookie(user: User, jwt: JothJwtService, res: 
     });
 
     res.cookie('jid', token, {
-        secure: true,
+        secure: process.env.NODE_ENV !== 'development',
         httpOnly: true,
         sameSite: 'strict',
         expires: expiresAt.endDate,

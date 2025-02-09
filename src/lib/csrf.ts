@@ -1,5 +1,5 @@
-import 'dotenv/config';
 import { doubleCsrf } from 'csrf-csrf';
+import 'dotenv/config';
 
 export const csrf = doubleCsrf({
     getSecret: _req => process.env.CSRF_SECRET!,
@@ -9,7 +9,7 @@ export const csrf = doubleCsrf({
         httpOnly: true,
         // sameSite: "strict",
         path: '/',
-        secure: true,
+        secure: process.env.NODE_ENV !== 'development',
     },
     getTokenFromRequest: req => req.body._csrf, // A function that returns the token from the request
 });

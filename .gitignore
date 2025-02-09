@@ -4,3 +4,4 @@ dist/
 .DS_Store
 keys/
 Dockerfile
+prisma/seed.ts
