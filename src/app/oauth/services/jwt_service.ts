@@ -1,8 +1,7 @@
-import 'dotenv/config';
 import { ExtraAccessTokenFieldArgs, JwtService } from '@jmondi/oauth2-server';
 import { Injectable } from '@nestjs/common';
-import { Secret } from 'jsonwebtoken';
 import fs from 'fs';
+import { KEY_PATH } from '../../../lib/common/values.js';
 
 @Injectable()
 export class JothJwtService extends JwtService {
@@ -14,7 +13,7 @@ export class JothJwtService extends JwtService {
     }
 
     static register() {
-        const key = fs.readFileSync('./keys/private.key');
+        const key = fs.readFileSync(KEY_PATH);
 
         return {
             provide: JothJwtService,

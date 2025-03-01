@@ -1,43 +1,41 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
+import { csrf } from '../../lib/csrf.js';
+import { LoggerMiddleware } from '../../logging/middleware/logger.middleware.js';
+import { DBModule } from '../db/db.module.js';
+import { AuthorizationController } from './controllers/authorization.controller.js';
+import { LoginController } from './controllers/login.controller.js';
+import { RevokeController } from './controllers/revoke.controller.js';
+import { SignupController } from './controllers/signup.controller.js';
+import { TokenController } from './controllers/token.controller.js';
+import { UserMiddleware } from './middleware/user.middleware.js';
 import { AuthorizationServerService } from './services/authorization_server.service.js';
 import { JothJwtService } from './services/jwt_service.js';
-import { PrismaModule } from '../prisma/prisma.module.js';
-import { AuthorizationController } from './controllers/authorization.controller.js';
-import { TokenController } from './controllers/token.controller.js';
-import { RevokeController } from './controllers/revoke.controller.js';
-import { LoginController } from './controllers/login.controller.js';
-import { CurrentUserMiddleware } from '../current_user.middleware.js';
-import { csrf } from '../../lib/csrf.js';
-import { ScopesController } from './controllers/scopes.controller.js';
-import { SignupController } from './controllers/signup.controller.js';
 
 @Module({
-    imports: [PrismaModule],
+    imports: [DBModule],
     controllers: [
         AuthorizationController,
         RevokeController,
-        ScopesController,
         TokenController,
         LoginController,
-        SignupController
+        SignupController,
     ],
     providers: [
         JothJwtService.register(),
         AuthorizationServerService.register({
             requiresPKCE: true,
             requiresS256: true,
-        }),
-        CurrentUserMiddleware,
+        })
     ],
     exports: [AuthorizationServerService],
 })
 export class OAuthModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(csrf.doubleCsrfProtection).forRoutes(LoginController, SignupController, ScopesController);
-        consumer.apply(CurrentUserMiddleware).forRoutes({
-            path: '*',
-            method: RequestMethod.ALL,
-        });
+        consumer
+            .apply(csrf.doubleCsrfProtection)
+            .forRoutes(LoginController, SignupController);
+        consumer.apply(UserMiddleware).forRoutes('*path');
+        consumer.apply(LoggerMiddleware).forRoutes('*path');
     }
 }

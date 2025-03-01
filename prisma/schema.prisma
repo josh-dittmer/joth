@@ -100,13 +100,13 @@ model OAuthToken {
 }
 
 model OAuthScope {
-  id            String          @id @db.Uuid
-  name          String
-  createdAt     DateTime        @default(now()) @db.Timestamp(6)
-  updatedAt     DateTime?       @updatedAt
-  OAuthClients  OAuthClient[]
-  OAuthAuthCode OAuthAuthCode[]
-  OAuthToken    OAuthToken[]
+  id               String             @id @db.Uuid
+  name             String
+  createdAt        DateTime           @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime?          @updatedAt
+  OAuthClients     OAuthClient[]
+  OAuthAuthCode    OAuthAuthCode[]
+  OAuthToken       OAuthToken[]
   OAuthClientScope OAuthClientScope[]
 
   @@index([name], name: "idx_oauthscope_name")

@@ -1,26 +1,25 @@
+import { requestFromExpress } from '@jmondi/oauth2-server/express';
 import {
     Body,
     Controller,
     Get,
+    HttpStatus,
     Post,
     Render,
     Req,
-    Res,
-    HttpStatus,
-    UnauthorizedException,
+    Res
 } from '@nestjs/common';
-import type { Response, Request } from 'express';
-import { requestFromExpress } from '@jmondi/oauth2-server/express';
 import { User } from '@prisma/client';
-import { DateDuration } from '@jmondi/date-duration';
 import { IsEmail, IsString } from 'class-validator';
+import type { Request, Response } from 'express';
 
-import { AuthorizationServerService } from '../services/authorization_server.service.js';
-import { PrismaService } from '../../prisma/prisma.service.js';
+import { API_PREFIX, PATHS } from '../../../lib/common/values.js';
 import { verifyPasswordOrThrow } from '../../../lib/password.js';
-import { JothJwtService } from '../services/jwt_service.js';
-import { createUrl, Pathnames } from '../../../lib/url.js';
 import { createSessionCookie } from '../../../lib/session.js';
+import { createUrl } from '../../../lib/url.js';
+import { DBService } from '../../db/services/db.service.js';
+import { AuthorizationServerService } from '../services/authorization_server.service.js';
+import { JothJwtService } from '../services/jwt_service.js';
 
 export class LoginBody {
     @IsEmail()
@@ -30,13 +29,13 @@ export class LoginBody {
 }
 
 enum LoginErrors {
-    BadCredentials = '1'
-};
+    BadCredentials = '1',
+}
 
 function getErrorMessage(code: any): string | null {
     if (!code || typeof code !== 'string') return null;
-    
-    switch(code) {
+
+    switch (code) {
         case LoginErrors.BadCredentials:
             return 'Incorrect email or password!';
         default:
@@ -44,27 +43,27 @@ function getErrorMessage(code: any): string | null {
     }
 }
 
-@Controller(Pathnames.login)
+@Controller(PATHS.login)
 export class LoginController {
     constructor(
         private readonly jwt: JothJwtService,
         private readonly oauth: AuthorizationServerService,
-        private readonly prisma: PrismaService,
-    ) {}
+        private readonly prisma: DBService,
+    ) { }
 
     @Get()
     @Render('login')
     async index(@Req() req: Request, @Res() res: Response) {
         await this.oauth.validateAuthorizationRequest(requestFromExpress(req));
 
-        const signupUrl = createUrl(`${Pathnames.prefix}${Pathnames.signup}`, req.query);
+        const signupUrl = createUrl(req.secure, req.host, `${API_PREFIX}/${PATHS.signup}`, req.query);
         signupUrl.searchParams.delete('fail_code');
 
         return {
             csrfToken: req.csrfToken(),
             loginFormAction: '#',
             errorMessage: getErrorMessage(req.query.fail_code),
-            signupUrl: signupUrl.toString()
+            signupUrl: signupUrl.toString(),
         };
     }
 
@@ -75,11 +74,11 @@ export class LoginController {
         @Body() body: LoginBody,
     ) {
         const redirectWithFail = (code: string) => {
-            const redirectUrl = createUrl(`${Pathnames.prefix}${Pathnames.login}`, req.query);
+            const redirectUrl = createUrl(req.secure, req.host, `${API_PREFIX}/${PATHS.login}`, req.query);
             redirectUrl.searchParams.set('fail_code', code);
 
             res.redirect(redirectUrl.toString());
-        }
+        };
 
         await this.oauth.validateAuthorizationRequest(req);
 
@@ -111,8 +110,8 @@ export class LoginController {
 
         await createSessionCookie(user, this.jwt, res);
 
-        const redirectUrl = createUrl(`${Pathnames.prefix}${Pathnames.authorize}`, req.query);
-        
+        const redirectUrl = createUrl(req.secure, req.host, `${API_PREFIX}/${PATHS.authorize}`, req.query);
+
         // delete unnecessary search params (if they are present)
         redirectUrl.searchParams.delete('clear_session');
         redirectUrl.searchParams.delete('fail_code');

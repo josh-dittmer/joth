@@ -84,19 +84,25 @@ CREATE TABLE "OAuthScope" (
 -- CreateTable
 CREATE TABLE "_OAuthClientToOAuthScope" (
     "A" UUID NOT NULL,
-    "B" UUID NOT NULL
+    "B" UUID NOT NULL,
+
+    CONSTRAINT "_OAuthClientToOAuthScope_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateTable
 CREATE TABLE "_OAuthAuthCodeToOAuthScope" (
     "A" TEXT NOT NULL,
-    "B" UUID NOT NULL
+    "B" UUID NOT NULL,
+
+    CONSTRAINT "_OAuthAuthCodeToOAuthScope_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateTable
 CREATE TABLE "_OAuthScopeToOAuthToken" (
     "A" UUID NOT NULL,
-    "B" TEXT NOT NULL
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_OAuthScopeToOAuthToken_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -124,19 +130,10 @@ CREATE INDEX "idx_oauthtoken_refreshtoken" ON "OAuthToken"("refreshToken");
 CREATE INDEX "idx_oauthscope_name" ON "OAuthScope"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_OAuthClientToOAuthScope_AB_unique" ON "_OAuthClientToOAuthScope"("A", "B");
-
--- CreateIndex
 CREATE INDEX "_OAuthClientToOAuthScope_B_index" ON "_OAuthClientToOAuthScope"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_OAuthAuthCodeToOAuthScope_AB_unique" ON "_OAuthAuthCodeToOAuthScope"("A", "B");
-
--- CreateIndex
 CREATE INDEX "_OAuthAuthCodeToOAuthScope_B_index" ON "_OAuthAuthCodeToOAuthScope"("B");
-
--- CreateIndex
-CREATE UNIQUE INDEX "_OAuthScopeToOAuthToken_AB_unique" ON "_OAuthScopeToOAuthToken"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_OAuthScopeToOAuthToken_B_index" ON "_OAuthScopeToOAuthToken"("B");
@@ -176,3 +173,4 @@ ALTER TABLE "_OAuthScopeToOAuthToken" ADD CONSTRAINT "_OAuthScopeToOAuthToken_A_
 
 -- AddForeignKey
 ALTER TABLE "_OAuthScopeToOAuthToken" ADD CONSTRAINT "_OAuthScopeToOAuthToken_B_fkey" FOREIGN KEY ("B") REFERENCES "OAuthToken"("accessToken") ON DELETE CASCADE ON UPDATE CASCADE;
+

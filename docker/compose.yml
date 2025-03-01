@@ -1,0 +1,27 @@
+name: joth
+services:
+    joth:
+        build:
+            context: ../
+            dockerfile: docker/joth/Dockerfile
+        ports:
+            - 8080:8080
+        depends_on:
+            - db
+    db:
+        build:
+            context: ../
+            dockerfile: docker/db/Dockerfile
+        restart: always
+        ports:
+            - 8888:5432
+        shm_size: 128mb
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+            POSTGRES_DB: joth
+        volumes:
+            - db_data:/var/lib/postgresql/data
+
+volumes:
+    db_data:

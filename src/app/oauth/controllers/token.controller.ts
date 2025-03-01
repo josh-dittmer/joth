@@ -2,13 +2,13 @@ import { OAuthRequest } from '@jmondi/oauth2-server';
 import { Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import type { Request, Response } from 'express';
 
-import { AuthorizationServerService } from '../services/authorization_server.service.js';
 import { handleExpressError, requestFromExpress } from '@jmondi/oauth2-server/express';
-import { Pathnames } from '../../../lib/url.js';
+import { PATHS } from '../../../lib/common/values.js';
+import { AuthorizationServerService } from '../services/authorization_server.service.js';
 
-@Controller(Pathnames.token)
+@Controller(PATHS.token)
 export class TokenController {
-    constructor(private readonly oauth: AuthorizationServerService) {}
+    constructor(private readonly oauth: AuthorizationServerService) { }
 
     @Post()
     @HttpCode(HttpStatus.OK)

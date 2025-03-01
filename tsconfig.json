@@ -4,18 +4,20 @@
         "target": "ESNext",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
-
         /* Advanced Options */
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-
         /* Output Options */
         "removeComments": true,
         "sourceMap": true,
-        "types": ["./src/global.d.ts"],
+        "types": [
+            "./src/global.d.ts"
+        ],
         "skipLibCheck": true
     },
-    "include": ["src/**/*.ts", "prisma/**/*.ts"]
+    "include": [
+        "**/*.ts"
+    ]
 }

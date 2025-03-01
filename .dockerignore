@@ -1,0 +1,13 @@
+.git
+.vscode
+dist
+docker
+node_modules
+.dockerignore
+.env.dev
+.env.dev.example
+.env.prod.example
+.gitignore
+.prettierignore
+.prettierrc
+eslint.config.js

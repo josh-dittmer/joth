@@ -1,19 +1,19 @@
-import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
 import {
     DateInterval,
     generateRandomToken,
     OAuthAuthCode,
     OAuthAuthCodeRepository,
 } from '@jmondi/oauth2-server';
+import { PrismaClient } from '@prisma/client';
 
+import { AUTH_CODE_LIFETIME } from '../../../lib/common/values.js';
 import { AuthCode } from '../entities/auth_code.js';
 import { Client } from '../entities/client.js';
 import { Scope } from '../entities/scope.js';
 import { User } from '../entities/user.js';
 
 export class AuthCodeRepository implements OAuthAuthCodeRepository {
-    constructor(private readonly prisma: PrismaClient) {}
+    constructor(private readonly prisma: PrismaClient) { }
 
     async getByIdentifier(authCodeCode: string): Promise<AuthCode> {
         const entity = await this.prisma.oAuthAuthCode.findUnique({
@@ -38,7 +38,7 @@ export class AuthCodeRepository implements OAuthAuthCodeRepository {
             code: generateRandomToken(),
             codeChallenge: null,
             codeChallengeMethod: 'S256',
-            expiresAt: new DateInterval(`${process.env.AUTH_CODE_LIFETIME!}s`).getEndDate(),
+            expiresAt: new DateInterval(`${AUTH_CODE_LIFETIME}s`).getEndDate(),
             client,
             clientId: client.id,
             user,

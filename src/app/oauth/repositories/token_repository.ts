@@ -1,20 +1,19 @@
-import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
 import {
     DateInterval,
     generateRandomToken,
     OAuthClient,
     OAuthTokenRepository,
 } from '@jmondi/oauth2-server';
+import { PrismaClient } from '@prisma/client';
 
+import { ACCESS_TOKEN_LIFETIME, REFRESH_TOKEN_LIFETIME } from '../../../lib/common/values.js';
 import { Client } from '../entities/client.js';
 import { Scope } from '../entities/scope.js';
 import { Token } from '../entities/token.js';
 import { User } from '../entities/user.js';
-import { DateDuration } from '@jmondi/date-duration';
 
 export class TokenRepository implements OAuthTokenRepository {
-    constructor(private readonly prisma: PrismaClient) {}
+    constructor(private readonly prisma: PrismaClient) { }
 
     async findById(accessToken: string): Promise<Token> {
         const token = await this.prisma.oAuthToken.findUnique({
@@ -33,7 +32,9 @@ export class TokenRepository implements OAuthTokenRepository {
     async issueToken(client: Client, scopes: Scope[], user?: User): Promise<Token> {
         return new Token({
             accessToken: generateRandomToken(),
-            accessTokenExpiresAt: new DateInterval(`${process.env.ACCESS_TOKEN_LIFETIME!}s`).getEndDate(),
+            accessTokenExpiresAt: new DateInterval(
+                `${ACCESS_TOKEN_LIFETIME}s`,
+            ).getEndDate(),
             refreshToken: null,
             refreshTokenExpiresAt: null,
             client,
@@ -64,16 +65,18 @@ export class TokenRepository implements OAuthTokenRepository {
 
     async issueRefreshToken(token: Token, _: OAuthClient): Promise<Token> {
         token.refreshToken = generateRandomToken();
-        token.refreshTokenExpiresAt = new DateInterval(`${process.env.REFRESH_TOKEN_LIFETIME!}s`).getEndDate(),
-        await this.prisma.oAuthToken.update({
-            where: {
-                accessToken: token.accessToken,
-            },
-            data: {
-                refreshToken: token.refreshToken,
-                refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-            },
-        });
+        (token.refreshTokenExpiresAt = new DateInterval(
+            `${REFRESH_TOKEN_LIFETIME}s`,
+        ).getEndDate()),
+            await this.prisma.oAuthToken.update({
+                where: {
+                    accessToken: token.accessToken,
+                },
+                data: {
+                    refreshToken: token.refreshToken,
+                    refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+                },
+            });
         return token;
     }
 

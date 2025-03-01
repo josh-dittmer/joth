@@ -1,15 +1,14 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Response, Request } from 'express';
-
-import { PrismaService } from './prisma/prisma.service.js';
-import { JothJwtService } from './oauth/services/jwt_service.js';
+import { Request, Response } from 'express';
+import { DBService } from '../../db/services/db.service.js';
+import { JothJwtService } from '../services/jwt_service.js';
 
 @Injectable()
-export class CurrentUserMiddleware implements NestMiddleware {
+export class UserMiddleware implements NestMiddleware {
     constructor(
-        private readonly prisma: PrismaService,
+        private readonly prisma: DBService,
         private readonly jwt: JothJwtService,
-    ) {}
+    ) { }
 
     async use(req: Request, _res: Response, next: () => void) {
         const jid = req.cookies.jid;

@@ -1,8 +1,8 @@
 import { doubleCsrf } from 'csrf-csrf';
-import 'dotenv/config';
+import { CSRF_SECRET } from './common/values.js';
 
 export const csrf = doubleCsrf({
-    getSecret: _req => process.env.CSRF_SECRET!,
+    getSecret: _req => CSRF_SECRET,
     // __Host-psifi.x-csrf-token does not work with localhost
     cookieName: 'x-csrf-token',
     cookieOptions: {

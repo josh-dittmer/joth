@@ -1,7 +1,10 @@
 node_modules/
 dist/
-.env
+.env.dev
+.env.prod
 .DS_Store
 keys/
 Dockerfile
-prisma/seed.ts
+prisma/seed.dev.ts
+prisma/seed.prod.ts
+public/styles/app.css

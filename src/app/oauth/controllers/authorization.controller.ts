@@ -1,17 +1,17 @@
-import type { Request, Response } from 'express';
-import { Controller, Get, Req, Res } from '@nestjs/common';
 import {
     handleExpressError,
     handleExpressResponse,
     requestFromExpress,
 } from '@jmondi/oauth2-server/express';
+import { Controller, Get, Req, Res } from '@nestjs/common';
+import type { Request, Response } from 'express';
 
+import { API_PREFIX, PATHS } from '../../../lib/common/values.js';
 import { AuthorizationServerService } from '../services/authorization_server.service.js';
-import { Pathnames } from '../../../lib/url.js';
 
-@Controller(Pathnames.authorize)
+@Controller(PATHS.authorize)
 export class AuthorizationController {
-    constructor(private readonly oauth: AuthorizationServerService) {}
+    constructor(private readonly oauth: AuthorizationServerService) { }
 
     @Get()
     async get(@Req() req: Request, @Res() res: Response) {
@@ -25,10 +25,9 @@ export class AuthorizationController {
 
             const clearSession = req.query.clear_session === '1';
 
-            // You will probably redirect the user to a login endpoint.
             if (!user || clearSession) {
                 const [_, params] = req.url.split('?');
-                res.status(302).redirect(`${Pathnames.prefix}${Pathnames.login}?${params}`);
+                res.status(302).redirect(`${API_PREFIX}/${PATHS.login}?${params}`);
                 return;
             }
 
