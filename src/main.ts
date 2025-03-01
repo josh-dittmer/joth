@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import 'reflect-metadata';
 
 import { NestFactory } from '@nestjs/core';
@@ -11,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import nunjucks from 'nunjucks';
 
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface.js';
-import { AppModule } from './app.module.js';
+import { AppModule } from './app/app.module.js';
 import { API_PORT, API_PREFIX, COOKIE_SECRET, CORS_ALLOWED_ORIGIN } from './lib/common/values.js';
 import { JothLogger } from './logging/services/logger.service.js';
 
