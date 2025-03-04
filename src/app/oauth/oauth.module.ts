@@ -1,5 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
+//import { PRIVATE_KEY_PATH, PUBLIC_KEY_PATH } from '../../lib/common/values.js';
+import { PRIVATE_KEY_PATH, PUBLIC_KEY_PATH } from '../../lib/common/values.js';
 import { csrf } from '../../lib/csrf.js';
 import { LoggerMiddleware } from '../../logging/middleware/logger.middleware.js';
 import { DBModule } from '../db/db.module.js';
@@ -22,7 +24,7 @@ import { JothJwtService } from './services/jwt_service.js';
         SignupController,
     ],
     providers: [
-        JothJwtService.register(),
+        JothJwtService.register(PRIVATE_KEY_PATH, PUBLIC_KEY_PATH),
         AuthorizationServerService.register({
             requiresPKCE: true,
             requiresS256: true,

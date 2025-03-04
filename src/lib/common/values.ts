@@ -3,7 +3,8 @@ export const DATABASE_URL = process.env.DATABASE_URL!;
 export const API_PREFIX = '/api/v1';
 export const API_PORT = process.env.API_PORT!;
 
-export const KEY_PATH = process.env.KEY_PATH!;
+export const PRIVATE_KEY_PATH = process.env.PRIVATE_KEY_PATH!;
+export const PUBLIC_KEY_PATH = process.env.PUBLIC_KEY_PATH!;
 
 export const CORS_ALLOWED_ORIGIN = process.env.CORS_ALLOWED_ORIGIN!;
 

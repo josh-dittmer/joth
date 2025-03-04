@@ -14,9 +14,9 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
         OAuthModule,
         LoggerModule,
         ServeStaticModule.forRoot({
-            rootPath: join(__dirname, '..', '..', 'public'),
+            rootPath: join(__dirname, '..', '..', '..', 'public'),
             serveRoot: '/public',
-            exclude: ['/api/(.*)'],
+            exclude: ['/api/*path'],
             serveStaticOptions: {
                 index: false,
             },

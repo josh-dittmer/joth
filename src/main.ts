@@ -45,4 +45,6 @@ async function bootstrap() {
     await app.listen(API_PORT);
 }
 
-bootstrap();
+bootstrap().then().catch((err) => {
+    console.log(err);
+});
