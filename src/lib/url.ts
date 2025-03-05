@@ -1,5 +1,8 @@
-export function createUrl(secure: boolean, host: string, pathname: string, queryParams: qs.ParsedQs): URL {
-    const url = new URL(`${secure ? 'https://' : 'http://'}${host}${pathname}`);
+import { Request } from "express";
+
+export function createUrl(req: Request, pathname: string, queryParams: qs.ParsedQs): URL {
+    const host = req.headers['x-forwarded-for'] || req.host;
+    const url = new URL(`${req.secure ? 'https://' : 'http://'}${host}${pathname}`);
 
     for (const param in queryParams) {
         const value = queryParams[param];

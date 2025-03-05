@@ -57,7 +57,7 @@ export class SignupController {
     async index(@Req() req: Request, @Res() res: Response) {
         await this.oauth.validateAuthorizationRequest(requestFromExpress(req));
 
-        const loginUrl = createUrl(req.secure, req.host, `${API_PREFIX}/${PATHS.login}`, req.query);
+        const loginUrl = createUrl(req, `${API_PREFIX}/${PATHS.login}`, req.query);
         loginUrl.searchParams.delete('fail_code');
 
         return {
@@ -75,7 +75,7 @@ export class SignupController {
         @Body() body: SignupBody,
     ) {
         const redirectWithFail = (code: string) => {
-            const redirectUrl = createUrl(req.secure, req.host, `${API_PREFIX}/${PATHS.signup}`, req.query);
+            const redirectUrl = createUrl(req, `${API_PREFIX}/${PATHS.signup}`, req.query);
             redirectUrl.searchParams.set('fail_code', code);
 
             res.redirect(redirectUrl.toString());
@@ -114,7 +114,7 @@ export class SignupController {
 
         await createSessionCookie(newUser, this.jwt, res);
 
-        const redirectUrl = createUrl(req.secure, req.host, `${API_PREFIX}/${PATHS.authorize}`, req.query);
+        const redirectUrl = createUrl(req, `${API_PREFIX}/${PATHS.authorize}`, req.query);
 
         // delete unnecessary search params (if they are present)
         redirectUrl.searchParams.delete('clear_session');
