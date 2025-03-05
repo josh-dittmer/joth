@@ -4,7 +4,6 @@ dist/
 .env.prod
 .DS_Store
 keys/
-Dockerfile
 prisma/seed.dev.ts
 prisma/seed.prod.ts
 public/styles/app.css
