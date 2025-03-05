@@ -1,6 +1,7 @@
 import { Request } from "express";
 
 export function createUrl(req: Request, pathname: string, queryParams: qs.ParsedQs): URL {
+    console.log(req.headers);
     const host = req.headers['X-Forwarded-Host'] || req.host;
     const url = new URL(`${req.secure ? 'https://' : 'http://'}${host}${pathname}`);
 
